@@ -1,18 +1,27 @@
 const API_KEY = '21924211-a56ef8093bc4c324081574229';
-const URL = 'pixabay.com/api';
 
-function fetchImage(name) {
-  return fetch(
-    `https://${URL}/?image_type=photo&orientation=horizontal&q=${name}&page=1&per_page=12&key=${API_KEY}`,
-  ).then(response => {
-    if (response.ok) {
-      return response.json();
-    }
-    throw new Error('Error fetching data');
-  });
+export default class ImageSearch {
+  constructor() {
+    this.page = 1;
+  }
+  fetchImage(name) {
+    return fetch(
+      `https://pixabay.com/api/?image_type=photo&orientation=horizontal&q=${name}&page=${this.page}&per_page=12&key=${API_KEY}`,
+    ).then(response => {
+      if (response.ok) {
+        // console.log(page);
+        this.page += 1;
+        return response.json();
+      }
+      throw new Error('Error fetching data');
+    });
+  }
+
+  resetPage() {
+    this.page = 1;
+    // console.log(page);
+  }
 }
-
-export default { fetchImage };
 
 // async function fetchImage(name) {
 //     const response = await fetch(

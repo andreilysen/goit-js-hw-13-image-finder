@@ -1,27 +1,42 @@
-import API from './js/apiService.js';
+import ImageSearch from './js/apiService.js';
 import getRefs from './js/refs.js';
 import galleryCard from './tamplate/galleryCard.hbs';
 import debounce from 'lodash.debounce';
-
 import './sass/main.scss';
-
+const imageSearch = new ImageSearch();
 const refs = getRefs();
 
-function renderImg(images) {
+let searchVal = '';
+
+const renderImg = images => {
   const markup = images.hits.map(img => galleryCard(img)).join('');
-  refs.gallery.innerHTML = markup;
-  //   console.log(markup);
-}
-const searchImage = e => {
-  const searchVal = e.target.value;
-  if (searchVal === '') {
-    return (refs.gallery.innerHTML = '');
-  }
-  API.fetchImage(searchVal).then(searchVal => {
-    //   console.log(cats.hits);
-    renderImg(searchVal);
-  });
-  //   console.log(e.target.value);
+
+  refs.gallery.insertAdjacentHTML('beforeend', markup);
 };
-refs.query.addEventListener('input', debounce(searchImage, 500));
+
+const onSearchImage = async e => {
+  searchVal = e.target.value;
+  refs.gallery.innerHTML = '';
+
+  imageSearch.resetPage();
+  await imageSearch.fetchImage(searchVal).then(searchVal => renderImg(searchVal));
+  refs.loadButton.classList.remove('is-hidden');
+};
+const loadMore = async click => {
+  await imageSearch.fetchImage(searchVal).then(searchVal => renderImg(searchVal));
+  const element = document.querySelector('.load-button');
+  element.scrollIntoView({
+    behavior: 'smooth',
+    block: 'end',
+  });
+  //   searchImage(searchVal);
+};
+
+refs.query.addEventListener('input', debounce(onSearchImage, 500));
 // console.log(refs.query.value);
+refs.loadButton.addEventListener('click', loadMore);
+
+// element.scrollIntoView({
+//   behavior: 'smooth',
+//   block: 'end',
+// });

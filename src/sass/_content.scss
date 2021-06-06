@@ -40,3 +40,26 @@ img {
   color: blue;
   margin-right: 10px;
 }
+
+.load-button {
+  margin-bottom: 10px;
+  text-align: center;
+}
+.button {
+  color: white;
+  background-color: blue;
+  border: 1px solid blue;
+  border-radius: 10px;
+  width: 150px;
+  height: 35px;
+}
+
+.button:hover,
+.button:focus {
+  color: blue;
+  background-color: white;
+}
+
+.is-hidden {
+  display: none;
+}
