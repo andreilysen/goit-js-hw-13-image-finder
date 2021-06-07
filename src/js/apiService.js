@@ -3,10 +3,11 @@ const API_KEY = '21924211-a56ef8093bc4c324081574229';
 export default class ImageSearch {
   constructor() {
     this.page = 1;
+    this.searchVal = '';
   }
-  fetchImage(name) {
+  fetchImage() {
     return fetch(
-      `https://pixabay.com/api/?image_type=photo&orientation=horizontal&q=${name}&page=${this.page}&per_page=12&key=${API_KEY}`,
+      `https://pixabay.com/api/?image_type=photo&orientation=horizontal&q=${this.searchVal}&page=${this.page}&per_page=12&key=${API_KEY}`,
     ).then(response => {
       if (response.ok) {
         // console.log(page);
